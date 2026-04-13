@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop Report — Fidélité des modèles ECM pour BESS LiFePO4</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300..900;1,300..900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            --text: #0a0a0a;
+            --text-soft: #3a3a3a;
+            --text-muted: #6a6a6a;
+            --accent: #b85c38;
+            --accent-soft: #d18a6a;
+            --bg: #fdfcfa;
+            --bg-soft: #f5f3ef;
+            --border: #e0dcd4;
+            --border-soft: #edeae3;
+            --link: #8b3a1a;
+            --code-bg: #f5f3ef;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+            font-size: 17px;
+            line-height: 1.68;
+            color: var(--text);
+            background: var(--bg);
+            font-weight: 400;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 4rem 2.5rem 6rem;
+        }
+
+        /* ============ COVER PAGE ============ */
+        .cover {
+            padding-top: 5rem;
+            padding-bottom: 4rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 3.5rem;
+        }
+
+        .cover .eyebrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .cover h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 2.75rem;
+            font-weight: 600;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .cover .subtitle {
+            font-family: 'Source Serif 4', serif;
+            font-size: 1.45rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--text-soft);
+            margin-bottom: 2.5rem;
+            line-height: 1.35;
+        }
+
+        .cover .meta {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.9;
+        }
+
+        .cover .meta strong {
+            color: var(--text-soft);
+            font-weight: 600;
+        }
+
+        .cover .meta .date {
+            margin-top: 1rem;
+            font-size: 0.82rem;
+        }
+
+        /* ============ HEADINGS ============ */
+        h1.section {
+            font-family: 'Source Serif 4', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-top: 4rem;
+            margin-bottom: 1.25rem;
+            line-height: 1.2;
+            color: var(--text);
+        }
+
+        h1.section::before {
+            content: attr(data-num);
+            display: inline-block;
+            color: var(--accent);
+            font-weight: 500;
+            margin-right: 0.6em;
+        }
+
+        h2 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-top: 2.5rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+            color: var(--text);
+        }
+
+        h2::before {
+            content: attr(data-num);
+            display: inline-block;
+            color: var(--accent);
+            font-weight: 500;
+            margin-right: 0.5em;
+        }
+
+        h3 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-style: italic;
+            margin-top: 1.75rem;
+            margin-bottom: 0.6rem;
+            color: var(--text-soft);
+        }
+
+        h3::before {
+            content: attr(data-num);
+            display: inline-block;
+            color: var(--accent);
+            font-weight: 500;
+            font-style: normal;
+            margin-right: 0.5em;
+        }
+
+        /* ============ PARAGRAPHS ============ */
+        p {
+            margin-bottom: 1.1rem;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        p+h2,
+        p+h3 {
+            margin-top: 2rem;
+        }
+
+        strong {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        em {
+            font-style: italic;
+        }
+
+        a {
+            color: var(--link);
+            text-decoration: none;
+            border-bottom: 1px solid var(--accent-soft);
+        }
+
+        a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        /* ============ LISTS ============ */
+        ul,
+        ol {
+            margin: 0 0 1.1rem 1.5rem;
+            line-height: 1.68;
+        }
+
+        li {
+            margin-bottom: 0.3rem;
+            padding-left: 0.3rem;
+        }
+
+        ul li::marker {
+            color: var(--accent);
+        }
+
+        ol li::marker {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* ============ FIGURES ============ */
+        figure {
+            margin: 2rem 0 2rem;
+            text-align: center;
+        }
+
+        figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        figure .placeholder {
+            display: block;
+            padding: 3.5rem 2rem;
+            background: var(--bg-soft);
+            border: 1px dashed var(--border);
+            color: var(--text-muted);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        figcaption {
+            margin-top: 0.85rem;
+            padding: 0 0.5rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            line-height: 1.55;
+            color: var(--text-soft);
+            text-align: left;
+        }
+
+        figcaption .fig-label {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* ============ TABLES ============ */
+        .table-wrapper {
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        th,
+        td {
+            padding: 0.6rem 0.85rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        thead th {
+            border-bottom: 2px solid var(--text);
+            border-top: 2px solid var(--text);
+            font-weight: 700;
+            color: var(--text);
+            background: var(--bg-soft);
+        }
+
+        tbody tr:hover {
+            background: var(--bg-soft);
+        }
+
+        tbody tr.highlight td {
+            background: rgba(184, 92, 56, 0.06);
+            font-weight: 600;
+        }
+
+        .table-caption {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            color: var(--text-soft);
+            margin-top: 0.75rem;
+            text-align: left;
+            line-height: 1.55;
+        }
+
+        .table-caption .tab-label {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* ============ CODE / PRE ============ */
+        code {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 0.85em;
+            background: var(--code-bg);
+            padding: 0.1em 0.35em;
+            border-radius: 3px;
+            color: var(--text);
+        }
+
+        pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            background: var(--bg-soft);
+            border-left: 3px solid var(--accent);
+            padding: 0.85rem 1.1rem;
+            margin: 1.25rem 0;
+            overflow-x: auto;
+            color: var(--text-soft);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            font-size: 1em;
+        }
+
+        /* ============ CALLOUTS ============ */
+        .callout {
+            margin: 1.5rem 0;
+            padding: 1rem 1.25rem;
+            background: var(--bg-soft);
+            border-left: 3px solid var(--accent);
+            font-size: 0.95rem;
+        }
+
+        .callout p:last-child {
+            margin-bottom: 0;
+        }
+
+        .callout .callout-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        /* ============ EQUATIONS ============ */
+        .equation {
+            margin: 1.5rem 0;
+            padding: 0.75rem;
+            text-align: center;
+            font-size: 1.1rem;
+            background: var(--bg-soft);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+
+        /* ============ TOC ============ */
+        .toc {
+            margin: 2rem 0 4rem;
+            padding: 1.75rem 2rem;
+            background: var(--bg-soft);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+        }
+
+        .toc h2 {
+            margin-top: 0;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-muted);
+            font-weight: 700;
+            border: none;
+            font-style: normal;
+        }
+
+        .toc h2::before {
+            content: none;
+        }
+
+        .toc ol {
+            margin: 1rem 0 0 0;
+            list-style: none;
+            counter-reset: toc;
+        }
+
+        .toc li {
+            counter-increment: toc;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            line-height: 1.9;
+            display: flex;
+            gap: 0.85rem;
+            color: var(--text-soft);
+            padding: 0;
+        }
+
+        .toc li::before {
+            content: counter(toc, decimal) ".";
+            color: var(--accent);
+            font-weight: 600;
+            min-width: 1.5rem;
+        }
+
+        .toc li a {
+            color: inherit;
+            border: none;
+        }
+
+        .toc li a:hover {
+            color: var(--accent);
+        }
+
+        /* ============ FOOTNOTES ============ */
+        .footnote {
+            font-size: 0.75em;
+            vertical-align: super;
+            color: var(--accent);
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+        }
+
+        .footnotes {
+            margin-top: 4rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.82rem;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-muted);
+        }
+
+        .footnotes ol {
+            margin-left: 1.2rem;
+        }
+
+        .footnotes li {
+            margin-bottom: 0.4rem;
+            line-height: 1.5;
+        }
+
+        /* ============ FOOTER / PAGE NUMBER ============ */
+        .footer {
+            margin-top: 5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+            letter-spacing: 0.05em;
+        }
+
+        /* ============ PRINT ============ */
+        @media print {
+            body {
+                background: white;
+                font-size: 11pt;
+            }
+
+            .page {
+                max-width: 100%;
+                padding: 0 1.5cm;
+            }
+
+            h1.section,
+            h2,
+            h3 {
+                break-after: avoid;
+            }
+
+            figure,
+            table,
+            pre,
+            .callout {
+                break-inside: avoid;
+            }
+
+            a {
+                color: var(--text);
+            }
+
+            .cover {
+                padding-top: 2cm;
+            }
+
+            .cover h1 {
+                font-size: 28pt;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+
+        <!-- ==================== COVER ==================== -->
+        <header class="cover">
+            <div class="eyebrow">Workshop Report</div>
+            <h1>Fidélité des modèles ECM pour BESS LiFePO4</h1>
+            <p class="subtitle">Comparaison rigoureuse de quatre circuits équivalents sur données réelles CALCE A123, de
+                0 à 40 °C</p>
+            <div class="meta">
+                <strong>Oussama Akir</strong> &middot; Doctorant en Intelligence Artificielle<br>
+                Laboratoire GRESCOM &middot; SUP'COM <br>
+                <strong>Encadrementes :</strong> Mme Rim Barrak, Mme. Fatma Rouissi, Mme. Hela Gassara<br>
+                <div class="date">15 Avril 2026 &middot; Meeting #12 &middot; Version préparatoire</div>
+            </div>
+        </header>
+
+        <!-- ==================== ABSTRACT ==================== -->
+        <section>
+            <h2 style="margin-top: 0;" data-num="">Résumé</h2>
+            <p>Ce rapport présente une comparaison rigoureuse de quatre modèles à circuits équivalents (ECM) — Rint,
+                Thévenin 1-RC, PNGV leaky et DP 2-RC — pour la prédiction de tension d'une cellule LiFePO4 en conditions
+                d'usage réel. L'évaluation s'appuie sur les données publiques CALCE A123 APR18650M1A (69 757 points de
+                mesure) à trois températures (0, 25 et 40 °C), sous profil DST (Dynamic Stress Test).</p>
+            <p>La présentation adopte un cadre pédagogique répétitif en six étapes inspiré de la norme IMRaD et des
+                <em>Lab Reports</em> des universités d'ingénierie (MIT, Penn State, Newcastle, Toronto) : problème,
+                formule, entrées, résultats, analyse, verdict. Chaque modèle reçoit le même traitement pour garantir une
+                comparaison équitable.
+            </p>
+            <p>Trois observations centrales émergent : le modèle DP 2-RC est le plus fidèle à toutes les températures
+                testées ; la correction leaky proposée pour le modèle PNGV stabilise un intégrateur divergent avec un
+                facteur d'amélioration de 3x ; et, de façon contre-intuitive, le PNGV leaky est à 40 °C moins précis que
+                le modèle Rint baseline, un phénomène d'inversion non anticipé qui illustre que la complexité
+                additionnelle n'est pas toujours payante.</p>
+        </section>
+
+        <!-- ==================== TOC ==================== -->
+        <nav class="toc">
+            <h2>Table des matières</h2>
+            <ol>
+                <li><a href="#motivation">Motivation &mdash; pourquoi un modèle batterie ?</a></li>
+                <li><a href="#methode">Cadre méthodologique &mdash; le Bloc Scientifique</a></li>
+                <li><a href="#donnees">Données expérimentales &mdash; CALCE A123 LFP</a></li>
+                <li><a href="#bloc1">Bloc 1 &mdash; Modèle Rint (baseline)</a></li>
+                <li><a href="#bloc2">Bloc 2 &mdash; Thévenin 1-RC</a></li>
+                <li><a href="#bloc3">Bloc 3 &mdash; PNGV avec correction leaky</a></li>
+                <li><a href="#bloc4">Bloc 4 &mdash; DP 2-RC</a></li>
+                <li><a href="#synthese">Synthèse &mdash; Table comparative</a></li>
+                <li><a href="#cout">Analyse économique de l'erreur</a></li>
+                <li><a href="#selection">Guide de sélection &mdash; quel modèle pour quelle application</a></li>
+                <li><a href="#conclusion">Conclusion et perspectives</a></li>
+            </ol>
+        </nav>
+
+        <!-- ==================== 1. MOTIVATION ==================== -->
+        <section id="motivation">
+            <h1 class="section" data-num="1">Motivation &mdash; pourquoi un modèle batterie ?</h1>
+
+            <h2 data-num="1.1">L'objectif ultime : un modèle fiable pour l'EMS microgrid</h2>
+            <p>Dans un microgrid hybride AC/DC comme celui décrit par Prattico et al. (2025)<a href="#fn1"
+                    class="footnote">1</a>, le système de gestion d'énergie fondé sur la logique floue (Fuzzy EMS) prend
+                en continu des décisions critiques : quand charger, quand décharger, quand puiser du réseau, quand
+                activer la pile à combustible. Toutes ces décisions dépendent d'une grandeur unique et centrale :
+                l'<em>état de charge</em> (SOC, <em>State of Charge</em>).</p>
+
+            <div class="callout">
+                <div class="callout-title">Point clé</div>
+                <p><strong>Le SOC n'est jamais mesurable directement.</strong> Il n'existe aucun capteur de SOC. Seuls
+                    la tension terminale $V$, le courant $I$ et la température $T$ sont accessibles à la mesure. Le SOC
+                    doit être <em>estimé</em> à partir de ces mesures — et cette estimation nécessite nécessairement un
+                    modèle.</p>
+            </div>
+
+            <h2 data-num="1.2">Deux cas d'usage, un même besoin de fidélité</h2>
+
+            <h3 data-num="1.2.1">Cas 1 &mdash; Simulation (Prattico, notre cadre)</h3>
+            <p>En simulation, il n'existe pas de vraie batterie. Le modèle <em>remplace</em> la batterie dans la boucle
+                de conception de l'EMS. Le système est conçu et validé contre ce modèle avant tout déploiement physique.
+                Si le modèle est infidèle, l'EMS validé en simulation échouera inévitablement sur la vraie batterie.</p>
+            <pre>[Modèle batterie] ─► V, SOC ─► [EMS Fuzzy] ─► décisions
+         ▲                                        │
+         └────────────────────────────────────────┘</pre>
+
+            <h3 data-num="1.2.2">Cas 2 &mdash; Déploiement réel (BMS embarqué)</h3>
+            <p>Dans un BMS réel, les capteurs fournissent $V$, $I$, $T$. Mais cela ne suffit pas :</p>
+            <ul>
+                <li>La tension seule ne suffit pas à identifier le SOC. Sur le plateau OCV plat du LFP (3.28–3.32 V),
+                    une même tension mesurée correspond à des SOC pouvant varier de 30 % à 70 %.</li>
+                <li>Le comptage coulombique seul dérive dans le temps : les erreurs sur $I$ s'accumulent, conduisant à
+                    une dérive de 5 à 10 % par jour, inutilisable à l'échelle de la semaine.</li>
+                <li>La solution consiste à fusionner $V_\text{mesure}$, le comptage coulombique et un <em>modèle</em>
+                    via un filtre de Kalman. Le modèle prédit la tension à partir du SOC estimé ; l'écart
+                    $V_\text{mesure} - V_\text{prédit}$ corrige continûment le SOC. C'est le principe du <em>jumeau
+                        numérique</em>.</li>
+            </ul>
+
+            <pre>Vraie batterie ─►[ V, I, T mesurés ]──────────┐
+                                                    ▼
+Modèle ─►[ V_prédit ]─► écart ─►[ Kalman ]──► SOC estimé
+     ▲                                              │
+     └──────────────────────────────────────────────┘</pre>
+
+            <p>Dans les deux cas, la <strong>fidélité du modèle détermine tout</strong>. En simulation, elle conditionne
+                la validité de l'EMS testé ; en déploiement, elle conditionne la qualité de l'estimation du SOC, et donc
+                la qualité des décisions prises par l'EMS en temps réel.</p>
+
+            <h2 data-num="1.3">Les conséquences d'un modèle infidèle</h2>
+            <p>Une erreur de quelques pourcents sur la tension prédite se propage en cascade à travers tout le système :
+            </p>
+            <ul>
+                <li><strong>Arbitrage tarifaire sous-optimal</strong> : le BMS n'ose pas utiliser les derniers pourcents
+                    de la batterie, perdant du revenu sur les fenêtres de prix élevé.</li>
+                <li><strong>Sur-décharge</strong> : une sous-estimation conduit à une dégradation accélérée, pouvant
+                    réduire la durée de vie batterie de 30 %.</li>
+                <li><strong>Sous-utilisation</strong> : une sur-estimation réduit l'amplitude effective de stockage,
+                    sous-exploitant l'actif.</li>
+                <li><strong>Instabilité du bus DC</strong> : une mauvaise anticipation de la capacité à fournir de la
+                    puissance entraîne des écarts hors tolérance IEEE 1547.</li>
+            </ul>
+
+            <h2 data-num="1.4">Enjeu chiffré</h2>
+            <p>Pour le BESS de 200 kWh décrit dans Prattico et al. avec les tarifs STEG de Tunisie (pointe à 0,15 €/kWh,
+                creux à 0,05 €/kWh), le revenu d'arbitrage idéal s'élève à environ 7 300 €/an. Une erreur de
+                modélisation de 5 à 10 % peut coûter plusieurs centaines d'euros par an <em>et</em> raccourcir la durée
+                de vie batterie, cumulant pertes opérationnelles et coût de remplacement.</p>
+
+            <h2 data-num="1.5">Question centrale</h2>
+            <p>Quel niveau de fidélité de modèle est <strong>nécessaire</strong> pour un EMS fiable, et quel niveau de
+                complexité est <strong>suffisant</strong> sans tomber dans la sur-ingénierie ? Prattico utilise un
+                modèle Rint (le plus simple). Est-ce assez ? Ou faut-il un Thévenin, un PNGV, un DP ? La réponse dépend
+                de la température d'opération, du profil de charge, et des contraintes de calcul du BMS embarqué. C'est
+                ce que ce workshop cherche à établir : comparer rigoureusement quatre modèles ECM de complexité
+                croissante sur données réelles à trois températures, pour identifier le meilleur compromis précision /
+                coût.</p>
+        </section>
+
+        <!-- ==================== 2. METHODE ==================== -->
+        <section id="methode">
+            <h1 class="section" data-num="2">Cadre méthodologique &mdash; le Bloc Scientifique</h1>
+            <p>Ce workshop adopte une structure répétitive en six étapes, inspirée de la norme <em>Lab Report</em>
+                utilisée dans les universités d'ingénierie (MIT CommLab, Penn State, Newcastle, Toronto) et du format
+                IMRaD (Introduction, Methods, Results, Discussion) des publications IEEE.</p>
+
+            <p>Chaque modèle reçoit exactement le même traitement en six étapes :</p>
+            <ol>
+                <li><strong>Problème</strong> &mdash; quelle limitation du modèle précédent est-ce qu'on adresse ?</li>
+                <li><strong>Formule</strong> &mdash; les équations mathématiques exactes.</li>
+                <li><strong>Inputs</strong> &mdash; les paramètres numériques, les données, les conditions
+                    expérimentales.</li>
+                <li><strong>Résultats</strong> &mdash; les graphiques : vue macro (durée complète) et micro (zoom 360
+                    s).</li>
+                <li><strong>Analyse</strong> &mdash; les métriques NRMSE aux trois températures et les observations.
+                </li>
+                <li><strong>Verdict</strong> &mdash; les forces et limites du modèle en une phrase.</li>
+            </ol>
+
+            <p>Cette répétition garantit une <strong>comparaison équitable</strong> : mêmes données, mêmes métriques,
+                même fenêtre temporelle de zoom pour les quatre modèles. La discipline formelle remplace l'intuition au
+                profit de la rigueur.</p>
+        </section>
+
+        <!-- ==================== 3. DONNEES ==================== -->
+        <section id="donnees">
+            <h1 class="section" data-num="3">Données expérimentales &mdash; CALCE A123 LFP</h1>
+
+            <h2 data-num="3.1">Cellule et source</h2>
+            <p>Les données proviennent du <em>CALCE Battery Research Group</em> de l'Université du Maryland, un jeu de
+                données public cité dans plus de cent publications. La cellule est une A123 APR18650M1A (chimie LiFePO4,
+                capacité nominale 1,1 Ah, tension nominale 3,3 V). Le profil est le <em>Dynamic Stress Test</em> (DST),
+                qui simule un usage réel par des impulsions de charge et décharge. Les tests sont effectués à trois
+                températures : 0 °C pour représenter le froid hivernal, 25 °C pour la référence, et 40 °C pour un climat
+                chaud.</p>
+
+            <h2 data-num="3.2">Volume et échantillonnage</h2>
+            <p>Environ 23 000 points de mesure par température, soit un total de 69 757 points avec un échantillonnage
+                d'environ 1 seconde. Les variables enregistrées sont le courant, la tension terminale et la température
+                in-situ.</p>
+
+            <figure>
+                <img src="./images/fig_intro_calce.png" alt="Profil CALCE A123 DST à trois températures"
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <span class="placeholder" style="display:none;">[ Figure 3.1 &mdash; à exporter depuis MATLAB sous le
+                    nom <code>fig_intro_calce.png</code> ]</span>
+                <figcaption><span class="fig-label">Figure 3.1.</span> Profil expérimental CALCE A123 LFP. En haut :
+                    courant DST (impulsions charge/décharge). Au milieu : tension mesurée aux trois températures &mdash;
+                    le froid accentue les chutes de tension à cause de la résistance ohmique plus élevée. En bas :
+                    température in-situ, maintenue constante par la chambre climatique durant le test.</figcaption>
+            </figure>
+
+            <h2 data-num="3.3">Choix du LFP et plateau OCV</h2>
+            <p>Le LiFePO4 est le choix dominant pour le stockage stationnaire en raison de sa longévité et de sa
+                sécurité. Son plateau de tension en circuit ouvert est particulièrement plat : sur 60 % de la plage SOC
+                (de 20 % à 80 %), la tension ne varie que de 40 mV (3,28 à 3,32 V). Cette particularité rend
+                l'estimation du SOC à partir de la seule tension extrêmement difficile, et constitue un test plus
+                exigeant que les chimies NMC ou NCA.</p>
+
+            <h2 data-num="3.4">Métrique &mdash; NRMSE</h2>
+            <p>La métrique adoptée est le <em>Normalized Root Mean Square Error</em> (NRMSE), exprimé en pourcentage :
+            </p>
+            <div class="equation">
+                $$\text{NRMSE}(\%) = \frac{\sqrt{\tfrac{1}{N}\sum_{k=1}^{N}(V_\text{pred}(k) -
+                V_\text{meas}(k))^2}}{\max(V_\text{meas}) - \min(V_\text{meas})} \times 100$$
+            </div>
+            <p>Cette normalisation par la plage de tension mesurée rend la métrique sans dimension et comparable entre
+                températures et chimies différentes. Un RMSE de 10 mV n'a pas la même signification sur une plage de 200
+                mV que sur une plage de 1 V ; le NRMSE élimine cette ambiguïté.</p>
+
+            <h2 data-num="3.5">Aperçu des quatre modèles</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Modèle</th>
+                            <th>Paramètres</th>
+                            <th>États</th>
+                            <th>Équation terminale</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Rint</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td>$V_t = V_{OC} - I\,R_0$</td>
+                        </tr>
+                        <tr>
+                            <td>Thévenin 1-RC</td>
+                            <td>3</td>
+                            <td>1</td>
+                            <td>$V_t = V_{OC} - I\,R_0 - V_{RC}$</td>
+                        </tr>
+                        <tr>
+                            <td>PNGV leaky</td>
+                            <td>4</td>
+                            <td>2</td>
+                            <td>$V_t = V_{OC} - I\,R_0 - V_{RC} - V_{Cb}$</td>
+                        </tr>
+                        <tr>
+                            <td>DP 2-RC</td>
+                            <td>5</td>
+                            <td>2</td>
+                            <td>$V_t = V_{OC} - I\,R_0 - V_{RC1} - V_{RC2}$</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="table-caption"><span class="tab-label">Tableau 3.1.</span> Les quatre modèles ECM comparés,
+                    classés par complexité croissante.</p>
+            </div>
+        </section>
+
+        <!-- ==================== 4. BLOC 1 RINT ==================== -->
+        <section id="bloc1">
+            <h1 class="section" data-num="4">Bloc 1 &mdash; Modèle Rint (baseline)</h1>
+
+            <h2 data-num="4.1">Problème</h2>
+            <p>Comment établir une <strong>référence simple</strong> pour quantifier l'apport de chaque modèle suivant ?
+                Le Rint est le modèle le plus élémentaire : aucun état dynamique, aucune mémoire. Il sert de ligne de
+                base pour mesurer les gains apportés par les modèles plus complexes.</p>
+
+            <h2 data-num="4.2">Formule</h2>
+            <div class="equation">
+                $$V_t(k) = V_{OC}(SOC(k)) - I(k) \cdot R_0$$
+                $$SOC(k+1) = SOC(k) - \frac{I(k) \cdot dt}{Q}$$
+            </div>
+            <p>Dans cette implémentation, $R_0$ est <strong>fixé</strong> à 67 mΩ, sans aucune dépendance au SOC ni à la
+                température. C'est le modèle utilisé par Prattico et al. (2025) en Section 3.2.4. Cette simplification
+                est intentionnelle : le Rint sert de baseline et doit <em>exposer</em> ses limites pour justifier la
+                montée en complexité des modèles suivants.</p>
+
+            <h2 data-num="4.3">Inputs</h2>
+            <ul>
+                <li>$R_0$ = 67 mΩ, FIXE</li>
+                <li>$Q$ = 1,1 Ah = 3960 As</li>
+                <li>OCV interpolé sur 15 breakpoints SOC (tabulation He, Xiong, Fan 2011)</li>
+                <li>Donnée : CALCE A123 à 0, 25 et 40 °C, profil DST</li>
+            </ul>
+
+            <h2 data-num="4.4">Résultats</h2>
+            <figure>
+                <img src="./images/fig_bloc1_rint_macro_micro.png" alt="Rint macro + micro zoom">
+                <figcaption><span class="fig-label">Figure 4.1.</span> Rint à 25 °C : vue macro (durée complète) et
+                    micro (zoom 360 s sur la transition de courant). La courbe bleue du Rint saute instantanément lors
+                    des transitions de courant, tandis que la mesure noire relaxe exponentiellement &mdash; c'est la
+                    <em>marche d'escalier</em> caractéristique du Rint.
+                </figcaption>
+            </figure>
+
+            <figure>
+                <img src="./images/fig_bloc1_rint_ultrazoom.png" alt="Rint ultra-zoom 50 secondes">
+                <figcaption><span class="fig-label">Figure 4.2.</span> Ultra-zoom sur un unique cycle de transition (50
+                    s). Le modèle Rint (pointillés bleus) bascule instantanément, alors que la mesure (trait noir épais)
+                    suit une relaxation lissée &mdash; c'est cette différence que les modèles suivants cherchent à
+                    capturer.</figcaption>
+            </figure>
+
+            <h2 data-num="4.5">Analyse</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Température</th>
+                            <th>NRMSE Rint</th>
+                            <th>Observation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0 °C</td>
+                            <td>~7,10 %</td>
+                            <td>le froid amplifie les chutes de tension</td>
+                        </tr>
+                        <tr>
+                            <td>25 °C</td>
+                            <td>~6,15 %</td>
+                            <td>baseline de référence</td>
+                        </tr>
+                        <tr>
+                            <td>40 °C</td>
+                            <td>~9,56 %</td>
+                            <td>effets thermiques non modélisés</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="table-caption"><span class="tab-label">Tableau 4.1.</span> NRMSE du modèle Rint aux trois
+                    températures testées.</p>
+            </div>
+
+            <h2 data-num="4.6">Verdict</h2>
+            <p><em>Rint est une baseline utile mais ne capture aucune dynamique transitoire.</em> L'écart est
+                particulièrement marqué aux transitions de courant, où la marche d'escalier du modèle s'oppose à la
+                relaxation exponentielle de la mesure.</p>
+        </section>
+
+        <!-- ==================== 5. BLOC 2 THEVENIN ==================== -->
+        <section id="bloc2">
+            <h1 class="section" data-num="5">Bloc 2 &mdash; Thévenin 1-RC</h1>
+
+            <h2 data-num="5.1">Problème</h2>
+            <p>Le Rint bascule instantanément quand le courant change. La batterie réelle présente au contraire une
+                <em>relaxation exponentielle</em> due au processus de transfert de charge à l'interface
+                électrode-électrolyte. Un circuit RC parallèle modélise naturellement cette dynamique.
+            </p>
+
+            <h2 data-num="5.2">Formule</h2>
+            <div class="equation">
+                $$V_t = V_{OC}(SOC) - I \cdot R_0 - V_{RC}$$
+                $$V_{RC}(k+1) = V_{RC}(k)\,e^{-dt/\tau_1} + R_1 \left(1 - e^{-dt/\tau_1}\right) I(k)$$
+            </div>
+            <p>Avec $\tau_1 = R_1 \cdot C_1 \approx 1{,}96$ s. La discrétisation est <strong>exacte</strong> par
+                <em>Zero-Order Hold</em> (ZOH) — ce n'est pas une approximation d'Euler. Avec $dt = 1$ s et $\tau_1
+                \approx 2$ s, l'erreur d'Euler serait d'environ 50 % ; le ZOH reste exact quelle que soit la valeur de
+                $dt$.
+            </p>
+
+            <h2 data-num="5.3">Inputs</h2>
+            <ul>
+                <li>$R_0$ = 67 mΩ nominal (désormais SOC-dépendant et mis à l'échelle en température)</li>
+                <li>$R_1$ = 14 mΩ nominal, SOC-dépendant (plage 14–40 mΩ)</li>
+                <li>$C_1$ = 140 F nominal, SOC-dépendant (plage 50–140 F)</li>
+                <li>$\tau_1 = 1{,}96$ s (valeur nominale à mi-SOC)</li>
+            </ul>
+
+            <h2 data-num="5.4">Résultats</h2>
+            <figure>
+                <img src="./images/fig_bloc2_thevenin_macro_micro.png" alt="Thévenin macro + micro">
+                <figcaption><span class="fig-label">Figure 5.1.</span> Thévenin à 25 °C. La courbe orange épouse la
+                    relaxation mesurée là où le Rint basculait brusquement. Le gain mesuré sur le NRMSE est d'environ 15
+                    % par rapport au Rint.</figcaption>
+            </figure>
+
+            <figure>
+                <img src="./images/fig_bloc2_thevenin_ultrazoom.png" alt="Thévenin ultra-zoom">
+                <figcaption><span class="fig-label">Figure 5.2.</span> Ultra-zoom 50 s. Le Thévenin (trait orange) suit
+                    fidèlement la relaxation exponentielle mesurée (trait noir). Le Rint (pointillés bleus) est conservé
+                    comme référence pour visualiser l'apport du circuit RC.</figcaption>
+            </figure>
+
+            <h2 data-num="5.5">Analyse</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Température</th>
+                            <th>NRMSE Thévenin</th>
+                            <th>vs Rint</th>
+                            <th>Gain</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0 °C</td>
+                            <td>~5,12 %</td>
+                            <td>~7,10 %</td>
+                            <td>≈28 %</td>
+                        </tr>
+                        <tr>
+                            <td>25 °C</td>
+                            <td>~5,25 %</td>
+                            <td>~6,15 %</td>
+                            <td>≈15 %</td>
+                        </tr>
+                        <tr>
+                            <td>40 °C</td>
+                            <td>~9,32 %</td>
+                            <td>~9,56 %</td>
+                            <td>≈3 %</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="table-caption"><span class="tab-label">Tableau 5.1.</span> Gains du Thévenin par rapport au
+                    Rint. L'apport du circuit RC est maximal à basse température, où les constantes de temps sont plus
+                    longues.</p>
+            </div>
+
+            <h2 data-num="5.6">Verdict</h2>
+            <p><em>Le Thévenin corrige le défaut principal du Rint en capturant la relaxation avec une unique constante
+                    de temps.</em> Sa limite est qu'une seule constante ne sépare pas les phénomènes rapides (transfert
+                de charge, ~2 s) des phénomènes lents (diffusion ionique, ~6,5 s).</p>
+        </section>
+
+        <!-- ==================== 6. BLOC 3 PNGV ==================== -->
+        <section id="bloc3">
+            <h1 class="section" data-num="6">Bloc 3 &mdash; PNGV avec correction leaky</h1>
+
+            <h2 data-num="6.1">Problème</h2>
+            <p>Le modèle PNGV (<em>Partnership for a New Generation of Vehicles</em>), issu du programme FreedomCAR du
+                Département de l'Énergie américain en 2001, ajoute un condensateur <em>bulk</em> $C_b$ en série pour
+                modéliser l'accumulation de charge. Problème : l'équation standard $dV_{Cb}/dt = I/C_b$ est un
+                <strong>intégrateur pur</strong>, à mémoire infinie. Sur un profil long comme le DST (environ 500
+                minutes), la tension $V_{Cb}$ dérive sans limite, et le modèle diverge.
+            </p>
+
+            <h2 data-num="6.2">Formule &mdash; correction proposée</h2>
+            <p>La formulation standard est :</p>
+            <div class="equation">
+                $$\frac{dV_{Cb}}{dt} = \frac{I}{C_{bulk}}$$
+            </div>
+            <p>Notre correction, dite <em>leaky</em>, remplace l'intégrateur pur par un intégrateur à fuite :</p>
+            <div class="equation">
+                $$\frac{dV_{Cb}}{dt} = -\frac{V_{Cb}}{\tau_{leak}} + \frac{I}{C_{bulk}}$$
+            </div>
+            <p>La tension terminale s'écrit alors :</p>
+            <div class="equation">
+                $$V_t = V_{OC}(SOC) - I \cdot R_0 - V_{RC} - V_{Cb}$$
+            </div>
+
+            <div class="callout">
+                <div class="callout-title">Contribution potentielle</div>
+                <p>Une recherche systématique dans la littérature (IEEE Xplore, Google Scholar, Scopus, avril 2026) n'a
+                    identifié aucun travail combinant explicitement le modèle PNGV avec un intégrateur à fuite pour
+                    stabiliser le condensateur bulk. Cette correction constitue potentiellement une contribution
+                    originale.</p>
+            </div>
+
+            <h2 data-num="6.3">Inputs</h2>
+            <ul>
+                <li>Paramètres du Thévenin hérités</li>
+                <li>$C_{bulk}$ : calculé à partir de la pente locale OCV/SOC</li>
+                <li>$\tau_{leak}$ : constante de temps de fuite stabilisatrice</li>
+                <li>Deux variantes testées : <em>standard</em> (sans fuite, intégrateur pur) et <em>leaky</em> (avec
+                    fuite)</li>
+            </ul>
+
+            <h2 data-num="6.4">Résultats</h2>
+            <figure>
+                <img src="./images/fig_bloc3_pngv_std_vs_leaky.png" alt="PNGV standard vs leaky">
+                <figcaption><span class="fig-label">Figure 6.1.</span> PNGV &mdash; standard (en haut, rouge) vs. leaky
+                    (en bas, vert). Le PNGV standard diverge progressivement ; le PNGV leaky reste stable sur toute la
+                    durée du test. Le facteur d'amélioration est d'environ 3x sur le NRMSE.</figcaption>
+            </figure>
+
+            <figure>
+                <img src="./images/fig_bloc3_pngv_ultrazoom.png" alt="PNGV ultra-zoom">
+                <figcaption><span class="fig-label">Figure 6.2.</span> Ultra-zoom 50 s. Le PNGV standard (pointillés
+                    rouges) diverge déjà dans cette fenêtre temporelle réduite ; le PNGV leaky (trait vert) reste aligné
+                    avec la mesure.</figcaption>
+            </figure>
+
+            <h2 data-num="6.5">Analyse &mdash; l'anomalie de 40 °C</h2>
+            <p>Le PNGV leaky est meilleur que le Rint à 0 °C et à 25 °C. Mais à 40 °C, il est <strong>moins
+                    précis</strong> que le Rint baseline :</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Température</th>
+                            <th>NRMSE PNGV leaky</th>
+                            <th>vs Rint baseline</th>
+                            <th>Verdict</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0 °C</td>
+                            <td>~5,00 %</td>
+                            <td>~7,10 %</td>
+                            <td>meilleur</td>
+                        </tr>
+                        <tr>
+                            <td>25 °C</td>
+                            <td>~5,06 %</td>
+                            <td>~6,15 %</td>
+                            <td>meilleur</td>
+                        </tr>
+                        <tr class="highlight">
+                            <td>40 °C</td>
+                            <td>~9,84 %</td>
+                            <td>~9,56 %</td>
+                            <td><strong>pire !</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="table-caption"><span class="tab-label">Tableau 6.1.</span> Inversion contre-intuitive à 40 °C
+                    &mdash; plus de complexité ne garantit pas plus de précision.</p>
+            </div>
+            <p>Cette inversion s'explique par une calibration du condensateur bulk dérivée implicitement de la pente
+                OCV, dont la dépendance thermique n'est pas correctement prise en compte à haute température. Le
+                phénomène est <em>contre-intuitif mais factuel</em>, et illustre un principe important : la complexité
+                additionnelle n'est pas systématiquement bénéfique.</p>
+
+            <h2 data-num="6.6">Verdict</h2>
+            <p><em>La correction leaky transforme un modèle divergent en modèle stable (facteur 3x d'amélioration), mais
+                    l'inversion à 40 °C montre les limites du condensateur bulk à haute température.</em> Le PNGV leaky
+                est intéressant pour son enseignement, moins pour son usage en production au-delà de 25 °C.</p>
+        </section>
+
+        <!-- ==================== 7. BLOC 4 DP ==================== -->
+        <section id="bloc4">
+            <h1 class="section" data-num="7">Bloc 4 &mdash; DP 2-RC</h1>
+
+            <h2 data-num="7.1">Problème</h2>
+            <p>Le Thévenin 1-RC utilise une seule constante de temps, or deux phénomènes distincts coexistent dans la
+                cellule : le <em>transfert de charge</em> (rapide, environ 2 s) à l'interface électrode-électrolyte et
+                la <em>diffusion ionique</em> (lente, environ 6,5 s) dans le matériau actif. Le modèle DP (<em>Dual
+                    Polarization</em>) sépare ces deux dynamiques avec deux circuits RC en série.</p>
+
+            <h2 data-num="7.2">Formule</h2>
+            <div class="equation">
+                $$V_t = V_{OC}(SOC) - I \cdot R_0 - V_{RC1} - V_{RC2}$$
+                $$V_{RCi}(k+1) = V_{RCi}(k)\,e^{-dt/\tau_i} + R_i\left(1 - e^{-dt/\tau_i}\right) I(k) \quad (i = 1, 2)$$
+            </div>
+            <p>Avec $\tau_1 \approx 2$ s (transfert de charge) et $\tau_2 \approx 6{,}5$ s (diffusion).</p>
+
+            <h2 data-num="7.3">Inputs</h2>
+            <ul>
+                <li>$R_0$, $R_1$, $C_1$ hérités du Thévenin</li>
+                <li>$R_2$ = 10 mΩ nominal</li>
+                <li>$C_2$ = 650 F nominal</li>
+                <li>$\tau_2 = R_2 \cdot C_2 \approx 6{,}5$ s</li>
+            </ul>
+
+            <h2 data-num="7.4">Résultats</h2>
+            <figure>
+                <img src="./images/fig_bloc4_dp_macro_micro.png" alt="DP macro + micro">
+                <figcaption><span class="fig-label">Figure 7.1.</span> DP 2-RC à 25 °C. Le modèle violet colle au plus
+                    près de la mesure à chaque transition de courant. Les courbes Rint et Thévenin sont conservées en
+                    référence pour visualiser l'apport du second circuit RC.</figcaption>
+            </figure>
+
+            <figure>
+                <img src="./images/fig_bloc4_dp_ultrazoom.png" alt="DP ultra-zoom">
+                <figcaption><span class="fig-label">Figure 7.2.</span> Ultra-zoom 50 s sur un unique cycle. Le DP (trait
+                    violet épais) suit la relaxation avec une précision supérieure au Thévenin, grâce à la seconde
+                    constante de temps qui capture la diffusion.</figcaption>
+            </figure>
+
+            <h2 data-num="7.5">Analyse</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Température</th>
+                            <th>NRMSE DP</th>
+                            <th>vs Rint</th>
+                            <th>vs Thévenin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0 °C</td>
+                            <td>~4,46 %</td>
+                            <td>−37 %</td>
+                            <td>−13 %</td>
+                        </tr>
+                        <tr>
+                            <td>25 °C</td>
+                            <td>~4,79 %</td>
+                            <td>−22 %</td>
+                            <td>−9 %</td>
+                        </tr>
+                        <tr>
+                            <td>40 °C</td>
+                            <td>~9,09 %</td>
+                            <td>−5 %</td>
+                            <td>−2 %</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="table-caption"><span class="tab-label">Tableau 7.1.</span> Gains du DP 2-RC par rapport au
+                    Rint et au Thévenin. L'amélioration est maximale à basse température, où les dynamiques lentes sont
+                    plus marquées.</p>
+            </div>
+
+            <h2 data-num="7.6">Verdict</h2>
+            <p><em>Le DP 2-RC est le meilleur modèle à toutes les températures testées.</em> Les deux constantes de
+                temps capturent la dynamique complète de la cellule. C'est le modèle recommandé pour les applications
+                BESS en conditions variées.</p>
+        </section>
+
+        <!-- ==================== 8. SYNTHESE ==================== -->
+        <section id="synthese">
+            <h1 class="section" data-num="8">Synthèse &mdash; Table comparative</h1>
+
+            <figure>
+                <img src="./images/fig_table3_bar_chart.png" alt="Table 3 bar chart">
+                <figcaption><span class="fig-label">Figure 8.1.</span> NRMSE des quatre modèles aux trois températures
+                    (barres groupées). Chaque groupe correspond à une température ; la barre violette du DP 2-RC est la
+                    plus courte à toutes les températures, confirmant visuellement son avantage.</figcaption>
+            </figure>
+
+            <figure>
+                <img src="./images/fig_synthese_heatmap.png" alt="Heatmap synthèse">
+                <figcaption><span class="fig-label">Figure 8.2.</span> Heatmap des NRMSE (plus sombre = plus précis). Le
+                    DP 2-RC domine la ligne la plus sombre à toutes les températures. L'inversion du PNGV à 40 °C
+                    apparaît clairement.</figcaption>
+            </figure>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Modèle</th>
+                            <th>0 °C</th>
+                            <th>25 °C</th>
+                            <th>40 °C</th>
+                            <th>Rang</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Rint</td>
+                            <td>~7,10 %</td>
+                            <td>~6,15 %</td>
+                            <td>~9,56 %</td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <td>Thévenin</td>
+                            <td>~5,12 %</td>
+                            <td>~5,25 %</td>
+                            <td>~9,32 %</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>PNGV leaky</td>
+                            <td>~5,00 %</td>
+                            <td>~5,06 %</td>
+                            <td>~9,84 %</td>
+                            <td>2 (sauf 40 °C)</td>
+                        </tr>
+                        <tr class="highlight">
+                            <td>DP 2-RC</td>
+                            <td>~4,46 %</td>
+                            <td>~4,79 %</td>
+                            <td>~9,09 %</td>
+                            <td><strong>1</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="table-caption"><span class="tab-label">Tableau 8.1.</span> Table 3 &mdash; NRMSE des quatre
+                    modèles ECM aux trois températures testées (CALCE A123, profil DST).</p>
+            </div>
+
+            <h2 data-num="8.1">Observations principales</h2>
+            <ol>
+                <li><strong>Le DP est le meilleur à toutes les températures.</strong> Le gain par rapport au Rint est
+                    d'environ 37 % à 0 °C, 22 % à 25 °C et 5 % à 40 °C.</li>
+                <li><strong>Le froid amplifie les écarts entre modèles.</strong> La différence Rint−DP est de 2,64
+                    points de pourcentage à 0 °C, mais seulement 0,47 point à 40 °C. Les dynamiques lentes ont plus
+                    d'impact quand la cinétique est ralentie.</li>
+                <li><strong>Inversion à 40 °C.</strong> Le PNGV leaky devient moins précis que le Rint baseline à haute
+                    température. Plus de complexité ne garantit pas plus de précision ; c'est un résultat
+                    contre-intuitif mais factuel qui mérite mention dans toute présentation honnête des résultats.</li>
+            </ol>
+        </section>
+
+        <!-- ==================== 9. COUT ==================== -->
+        <section id="cout">
+            <h1 class="section" data-num="9">Analyse économique de l'erreur</h1>
+            <p>Pour traduire les valeurs NRMSE en enjeu financier, considérons un BESS de 200 kWh opéré en arbitrage
+                tarifaire STEG en Tunisie.</p>
+
+            <h2 data-num="9.1">Hypothèses</h2>
+            <ul>
+                <li>Capacité BESS : 200 kWh</li>
+                <li>Cycle : 1 charge-décharge par jour, 365 jours par an</li>
+                <li>Tarif pointe : 0,15 €/kWh (14h–20h)</li>
+                <li>Tarif creux : 0,05 €/kWh (reste de la journée)</li>
+                <li>Spread : 0,10 €/kWh</li>
+                <li>Revenu idéal d'arbitrage : $200 \times 0{,}10 \times 365 \approx 7\,300$ €/an</li>
+            </ul>
+
+            <h2 data-num="9.2">Modélisation du coût de l'erreur</h2>
+            <p>Dans une approximation conservative, chaque pourcent de NRMSE se traduit en environ un pourcent de
+                sous-utilisation effective du BESS : le BMS, incertain de l'état réel, n'ose pas exploiter les dernières
+                marges de capacité, perdant ainsi du revenu d'arbitrage.</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Modèle</th>
+                            <th>NRMSE 25 °C</th>
+                            <th>Perte estimée</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Rint</td>
+                            <td>~6,15 %</td>
+                            <td>~449 €/an</td>
+                        </tr>
+                        <tr>
+                            <td>Thévenin</td>
+                            <td>~5,25 %</td>
+                            <td>~383 €/an</td>
+                        </tr>
+                        <tr>
+                            <td>PNGV leaky</td>
+                            <td>~5,06 %</td>
+                            <td>~369 €/an</td>
+                        </tr>
+                        <tr class="highlight">
+                            <td>DP 2-RC</td>
+                            <td>~4,79 %</td>
+                            <td>~350 €/an</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="table-caption"><span class="tab-label">Tableau 9.1.</span> Estimation de la perte annuelle due
+                    à l'erreur de modélisation, à 25 °C. L'économie du DP par rapport au Rint est d'environ 100 €/an
+                    pour une unique cellule de 200 kWh.</p>
+            </div>
+
+            <p>L'économie apportée par le DP par rapport au Rint est d'environ 100 €/an pour ce BESS unique. Multipliée
+                par une flotte de plusieurs dizaines ou centaines d'installations, cette différence devient
+                substantielle &mdash; et elle est obtenue sans aucun surcoût matériel, puisque le DP tourne sur le même
+                microcontrôleur que le Rint.</p>
+        </section>
+
+        <!-- ==================== 10. SELECTION ==================== -->
+        <section id="selection">
+            <h1 class="section" data-num="10">Guide de sélection &mdash; quel modèle pour quelle application ?</h1>
+            <p>Les résultats précédents permettent de construire un guide pratique à l'usage des concepteurs de BMS.</p>
+
+            <h2 data-num="10.1">Règles de décision</h2>
+            <ol>
+                <li><strong>Budget de calcul minimal</strong> (microcontrôleur 8 bits) : Rint avec éventuellement un
+                    observateur de disturbance léger.</li>
+                <li><strong>Climat tempéré</strong> (température moyenne &gt; 10 °C) : Thévenin suffisant pour la
+                    plupart des usages.</li>
+                <li><strong>Climat froid ou chaud</strong> (&lt; 10 °C ou &gt; 30 °C) : DP 2-RC recommandé.</li>
+                <li><strong>Précision critique</strong> (&lt; 5 mV d'erreur) : DP 2-RC associé à un filtre de Kalman.
+                </li>
+                <li><strong>PNGV</strong> : à utiliser avec la correction leaky, et en évitant les températures
+                    supérieures à 25 °C où l'inversion se manifeste.</li>
+            </ol>
+
+            <h2 data-num="10.2">Carte climatique</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ville</th>
+                            <th>T moy</th>
+                            <th>T min</th>
+                            <th>Modèle recommandé</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Oslo</td>
+                            <td>−2 °C</td>
+                            <td>−15 °C</td>
+                            <td>DP 2-RC + UKF</td>
+                        </tr>
+                        <tr>
+                            <td>Berlin</td>
+                            <td>10 °C</td>
+                            <td>−5 °C</td>
+                            <td>DP 2-RC</td>
+                        </tr>
+                        <tr>
+                            <td>Paris</td>
+                            <td>12 °C</td>
+                            <td>−2 °C</td>
+                            <td>DP 2-RC</td>
+                        </tr>
+                        <tr>
+                            <td>Rome</td>
+                            <td>16 °C</td>
+                            <td>3 °C</td>
+                            <td>DP 2-RC</td>
+                        </tr>
+                        <tr>
+                            <td>Tunis</td>
+                            <td>19 °C</td>
+                            <td>6 °C</td>
+                            <td>DP 2-RC</td>
+                        </tr>
+                        <tr>
+                            <td>Kebili</td>
+                            <td>23 °C</td>
+                            <td>5 °C</td>
+                            <td>DP 2-RC (pas de PNGV)</td>
+                        </tr>
+                        <tr>
+                            <td>Dubaï</td>
+                            <td>28 °C</td>
+                            <td>15 °C</td>
+                            <td>DP 2-RC (pas de PNGV)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="table-caption"><span class="tab-label">Tableau 10.1.</span> Recommandations de modèle ECM par
+                    zone climatique. Dans les pays tempérés à chauds, le DP 2-RC est systématiquement recommandé ; le
+                    PNGV est à éviter au-delà de 25 °C.</p>
+            </div>
+        </section>
+
+        <!-- ==================== 11. CONCLUSION ==================== -->
+        <section id="conclusion">
+            <h1 class="section" data-num="11">Conclusion et perspectives</h1>
+
+            <h2 data-num="11.1">Synthèse des résultats</h2>
+            <p>Ce workshop a comparé quatre modèles ECM de complexité croissante sur 69 757 points de mesures CALCE A123
+                réelles à trois températures, en utilisant un cadre méthodologique répétitif en six étapes. Trois
+                résultats principaux émergent :</p>
+            <ul>
+                <li>Le <strong>DP 2-RC</strong> est le modèle le plus fidèle à toutes les températures, grâce à ses deux
+                    constantes de temps qui capturent séparément le transfert de charge et la diffusion.</li>
+                <li>La <strong>correction leaky</strong> du modèle PNGV transforme un intégrateur divergent en un
+                    système stable, avec un facteur d'amélioration de 3x. Cette correction n'a pas été identifiée dans
+                    la littérature existante.</li>
+                <li>L'<strong>inversion à 40 °C</strong> du PNGV leaky, paradoxalement moins précis que le Rint baseline
+                    à haute température, rappelle qu'un surcroît de complexité n'entraîne pas systématiquement une
+                    amélioration de la précision.</li>
+            </ul>
+
+            <h2 data-num="11.2">Prochaines étapes</h2>
+            <ol>
+                <li>Intégration du DP 2-RC dans la simulation Simscape du microgrid Prattico.</li>
+                <li>Ajout d'un filtre de Kalman (UKF) pour l'estimation en ligne du SOC sur le plateau LFP plat.</li>
+                <li>Validation statistique par campagne Monte Carlo sur plusieurs centaines de conditions.</li>
+                <li>Exploration d'approches d'auto-recherche (RL, LLM) pour l'optimisation architecturale.</li>
+            </ol>
+
+            <h2 data-num="11.3">Avertissement méthodologique</h2>
+            <p>Ce rapport constitue une première itération d'un cadre de présentation rigoureux (le <em>Bloc
+                    Scientifique</em>), inspiré des pratiques des universités d'ingénierie de premier plan. Le format
+                s'améliorera au fil des itérations suivant les retours du jury d'encadrement.</p>
+        </section>
+
+        <!-- ==================== FOOTNOTES ==================== -->
+        <div class="footnotes">
+            <ol>
+                <li id="fn1">Prattico, D. et al. (2025). <em>Enhancing Power Quality and Reducing Costs in Hybrid AC/DC
+                        Microgrids via Fuzzy EMS</em>. Energies, 18(22), 5985. DOI : 10.3390/en18225985.</li>
+            </ol>
+        </div>
+
+        <footer class="footer">
+            Workshop Report &middot; 15 Avril 2026 &middot; GRESCOM / SUP'COM
+        </footer>
+
+    </div>
+</body>
+
+</html>
