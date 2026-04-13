@@ -689,7 +689,7 @@ Modèle ─►[ V_prédit ]─► écart ─►[ Kalman ]──► SOC estimé
                 in-situ.</p>
 
             <figure>
-                <img src="./images/fig_intro_calce.png" alt="Profil CALCE A123 DST à trois températures"
+                <img src="fig_intro_calce.png" alt="Profil CALCE A123 DST à trois températures"
                     onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
                 <span class="placeholder" style="display:none;">[ Figure 3.1 &mdash; à exporter depuis MATLAB sous le
                     nom <code>fig_intro_calce.png</code> ]</span>
@@ -789,7 +789,7 @@ Modèle ─►[ V_prédit ]─► écart ─►[ Kalman ]──► SOC estimé
 
             <h2 data-num="4.4">Résultats</h2>
             <figure>
-                <img src="./images/fig_bloc1_rint_macro_micro.png" alt="Rint macro + micro zoom">
+                <img src="fig_bloc1_rint_macro_micro.png" alt="Rint macro + micro zoom">
                 <figcaption><span class="fig-label">Figure 4.1.</span> Rint à 25 °C : vue macro (durée complète) et
                     micro (zoom 360 s sur la transition de courant). La courbe bleue du Rint saute instantanément lors
                     des transitions de courant, tandis que la mesure noire relaxe exponentiellement &mdash; c'est la
@@ -798,7 +798,7 @@ Modèle ─►[ V_prédit ]─► écart ─►[ Kalman ]──► SOC estimé
             </figure>
 
             <figure>
-                <img src="./images/fig_bloc1_rint_ultrazoom.png" alt="Rint ultra-zoom 50 secondes">
+                <img src="fig_bloc1_rint_ultrazoom.png" alt="Rint ultra-zoom 50 secondes">
                 <figcaption><span class="fig-label">Figure 4.2.</span> Ultra-zoom sur un unique cycle de transition (50
                     s). Le modèle Rint (pointillés bleus) bascule instantanément, alors que la mesure (trait noir épais)
                     suit une relaxation lissée &mdash; c'est cette différence que les modèles suivants cherchent à
@@ -874,14 +874,14 @@ Modèle ─►[ V_prédit ]─► écart ─►[ Kalman ]──► SOC estimé
 
             <h2 data-num="5.4">Résultats</h2>
             <figure>
-                <img src="./images/fig_bloc2_thevenin_macro_micro.png" alt="Thévenin macro + micro">
+                <img src="fig_bloc2_thevenin_macro_micro.png" alt="Thévenin macro + micro">
                 <figcaption><span class="fig-label">Figure 5.1.</span> Thévenin à 25 °C. La courbe orange épouse la
                     relaxation mesurée là où le Rint basculait brusquement. Le gain mesuré sur le NRMSE est d'environ 15
                     % par rapport au Rint.</figcaption>
             </figure>
 
             <figure>
-                <img src="./images/fig_bloc2_thevenin_ultrazoom.png" alt="Thévenin ultra-zoom">
+                <img src="fig_bloc2_thevenin_ultrazoom.png" alt="Thévenin ultra-zoom">
                 <figcaption><span class="fig-label">Figure 5.2.</span> Ultra-zoom 50 s. Le Thévenin (trait orange) suit
                     fidèlement la relaxation exponentielle mesurée (trait noir). Le Rint (pointillés bleus) est conservé
                     comme référence pour visualiser l'apport du circuit RC.</figcaption>
@@ -975,14 +975,14 @@ Modèle ─►[ V_prédit ]─► écart ─►[ Kalman ]──► SOC estimé
 
             <h2 data-num="6.4">Résultats</h2>
             <figure>
-                <img src="./images/fig_bloc3_pngv_std_vs_leaky.png" alt="PNGV standard vs leaky">
+                <img src="fig_bloc3_pngv_std_vs_leaky.png" alt="PNGV standard vs leaky">
                 <figcaption><span class="fig-label">Figure 6.1.</span> PNGV &mdash; standard (en haut, rouge) vs. leaky
                     (en bas, vert). Le PNGV standard diverge progressivement ; le PNGV leaky reste stable sur toute la
                     durée du test. Le facteur d'amélioration est d'environ 3x sur le NRMSE.</figcaption>
             </figure>
 
             <figure>
-                <img src="./images/fig_bloc3_pngv_ultrazoom.png" alt="PNGV ultra-zoom">
+                <img src="fig_bloc3_pngv_ultrazoom.png" alt="PNGV ultra-zoom">
                 <figcaption><span class="fig-label">Figure 6.2.</span> Ultra-zoom 50 s. Le PNGV standard (pointillés
                     rouges) diverge déjà dans cette fenêtre temporelle réduite ; le PNGV leaky (trait vert) reste aligné
                     avec la mesure.</figcaption>
@@ -1063,14 +1063,14 @@ Modèle ─►[ V_prédit ]─► écart ─►[ Kalman ]──► SOC estimé
 
             <h2 data-num="7.4">Résultats</h2>
             <figure>
-                <img src="./images/fig_bloc4_dp_macro_micro.png" alt="DP macro + micro">
+                <img src="fig_bloc4_dp_macro_micro.png" alt="DP macro + micro">
                 <figcaption><span class="fig-label">Figure 7.1.</span> DP 2-RC à 25 °C. Le modèle violet colle au plus
                     près de la mesure à chaque transition de courant. Les courbes Rint et Thévenin sont conservées en
                     référence pour visualiser l'apport du second circuit RC.</figcaption>
             </figure>
 
             <figure>
-                <img src="./images/fig_bloc4_dp_ultrazoom.png" alt="DP ultra-zoom">
+                <img src="fig_bloc4_dp_ultrazoom.png" alt="DP ultra-zoom">
                 <figcaption><span class="fig-label">Figure 7.2.</span> Ultra-zoom 50 s sur un unique cycle. Le DP (trait
                     violet épais) suit la relaxation avec une précision supérieure au Thévenin, grâce à la seconde
                     constante de temps qui capture la diffusion.</figcaption>
@@ -1124,14 +1124,14 @@ Modèle ─►[ V_prédit ]─► écart ─►[ Kalman ]──► SOC estimé
             <h1 class="section" data-num="8">Synthèse &mdash; Table comparative</h1>
 
             <figure>
-                <img src="./images/fig_table3_bar_chart.png" alt="Table 3 bar chart">
+                <img src="fig_table3_bar_chart.png" alt="Table 3 bar chart">
                 <figcaption><span class="fig-label">Figure 8.1.</span> NRMSE des quatre modèles aux trois températures
                     (barres groupées). Chaque groupe correspond à une température ; la barre violette du DP 2-RC est la
                     plus courte à toutes les températures, confirmant visuellement son avantage.</figcaption>
             </figure>
 
             <figure>
-                <img src="./images/fig_synthese_heatmap.png" alt="Heatmap synthèse">
+                <img src="fig_synthese_heatmap.png" alt="Heatmap synthèse">
                 <figcaption><span class="fig-label">Figure 8.2.</span> Heatmap des NRMSE (plus sombre = plus précis). Le
                     DP 2-RC domine la ligne la plus sombre à toutes les températures. L'inversion du PNGV à 40 °C
                     apparaît clairement.</figcaption>
